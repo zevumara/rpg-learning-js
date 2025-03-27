@@ -1,4 +1,9 @@
-const filesToLoad = ["src/core/pixi.js", "src/core/Engine.js"];
+const filesToLoad = [
+  "src/core/pixi.js",
+  "src/core/Engine.js",
+  "src/core/Signal.js",
+  "src/core/Component.js",
+];
 
 class Main {
   constructor() {

@@ -12,6 +12,7 @@ body {
   -ms-user-select: none;
   user-select: none;
   background-color: #222;
+  color: #ccc;
 }
 #errorPrinter {
   position: absolute;
