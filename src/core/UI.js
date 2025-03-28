@@ -20,6 +20,22 @@ function batch(fn) {
 }
 
 /**
+ * @function html
+ *
+ * @description
+ * Crea un fragmento de HTML a partir de un template string, permitiendo la inserción de valores dinámicos.
+ * Esto evita ataques XSS al usar `innerHTML` directamente.
+ */
+function html(strings, ...values) {
+  const template = document.createElement("template");
+  template.innerHTML = strings.reduce((acc, str, i) => {
+    let value = values[i] ?? "";
+    return acc + str + value;
+  }, "");
+  return template.content.cloneNode(true);
+}
+
+/**
  * @class Signal
  * @extends EventTarget
  *
@@ -71,6 +87,11 @@ class Signal extends EventTarget {
 
 const signal = (value) => new Signal(value);
 
+const UI = {
+  screen: signal("character"),
+  project: signal(null),
+};
+
 /**
  * @class Component
  * @extends HTMLElement
@@ -121,11 +142,11 @@ class CounterComponent extends Component {
   }
 
   render() {
-    this.innerHTML = `
-          <button id="decrement">-</button>
-          <h1 id="count">${this.signal.count.value}</h1>
-          <button id="increment">+</button>
-      `;
+    this.replaceChildren(html`
+      <button id="decrement">-</button>
+      <h1 id="count">${this.signal.count.value}</h1>
+      <button id="increment">+</button>
+    `);
 
     this.querySelector("#increment").addEventListener("click", () => this.signal.count.value++);
     this.querySelector("#decrement").addEventListener("click", () => this.signal.count.value--);
@@ -137,3 +158,27 @@ class CounterComponent extends Component {
 }
 
 customElements.define("counter-component", CounterComponent);
+
+class SidebarComponent extends Component {
+  constructor() {
+    super();
+    this.setSignal({ expanded: false });
+  }
+
+  render() {
+    this.replaceChildren(html`
+      <aside>
+        <ul>
+          <li>Open Folder</li>
+          <li>Settings</li>
+        </ul>
+      </aside>
+    `);
+
+    this.signal.expanded.onChange((value) => {
+      console.warn("Expanded:", value);
+    });
+  }
+}
+
+customElements.define("sidebar-component", SidebarComponent);
