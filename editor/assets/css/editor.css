@@ -1,0 +1,235 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light dark;
+  background-color: #161616;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  user-select: none;
+  --primary-color: #e5e5e5;
+  --secondary-color: #777777;
+  --active-color: #fca311;
+  --bg-color: #161616;
+  --active-bg-color: #593700;
+  --active-hover-bg-color: #804f01;
+  --shadow-color: #333;
+}
+
+*,
+html,
+body {
+  box-sizing: border-box;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  padding: 0;
+  margin: 0;
+  color: var(--primary-color);
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+input {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  border: none;
+  padding: 8px;
+  border-radius: 0;
+}
+input:focus {
+  outline: 0;
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.debug {
+  border: 1px dashed red;
+}
+
+button {
+  appearance: none;
+  border-radius: 0;
+  text-align: inherit;
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  cursor: pointer;
+  border: none;
+  color: inherit;
+  font: inherit;
+}
+
+button.primary {
+  width: 90%;
+  background-color: var(--shadow-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  margin: 12px auto;
+  font-size: 0.9rem;
+  transition-property: background-color;
+  transition-duration: 100ms;
+}
+button:hover.primary {
+  background-color: var(--active-bg-color);
+}
+
+main {
+  padding: 16px;
+  display: flex;
+  gap: 8px;
+  min-height: 100vh;
+}
+
+aside {
+  display: flex;
+  position: relative;
+  height: calc(100vh - 32px);
+}
+aside ul {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  list-style: none;
+  width: 100%;
+}
+aside ul li {
+  color: var(--primary-color);
+  stroke: var(--primary-color);
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+aside ul li span {
+  display: none;
+}
+aside ul li:hover {
+  cursor: pointer;
+}
+aside ul li.item:hover > * {
+  color: var(--active-color);
+  stroke: var(--active-color);
+}
+aside ul li:hover.active {
+  cursor: default;
+  color: var(--active-color);
+}
+aside ul li:hover.active > * {
+  color: var(--primary-color);
+  stroke: var(--primary-color);
+}
+aside button#close {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0.5;
+  transition-property: opacity;
+  transition-duration: 150ms;
+}
+aside button#close:hover {
+  opacity: 1;
+}
+aside.expanded button#close {
+  display: block;
+}
+aside.expanded ul li span {
+  display: block;
+}
+aside {
+  width: 42px;
+}
+aside.expanded {
+  width: 255px;
+}
+aside ul li.folder {
+  display: none;
+  flex-grow: 1;
+}
+aside.expanded ul li.folder {
+  display: block;
+}
+aside .search {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #777;
+  padding-bottom: 4px;
+}
+aside .search input {
+  background: none;
+  width: 100%;
+}
+aside .folder ul {
+  padding: 16px 8px;
+}
+aside ul#files li {
+  text-overflow: ellipsis;
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  text-shadow: 2px 1px 12px var(--shadow-color);
+}
+aside .folder li:hover {
+  color: var(--active-color);
+}
+aside .folder li.selected:hover {
+  color: var(--primary-color);
+}
+aside .folder li.selected {
+  padding: 4px 12px 7px 12px;
+  border: 1px solid var(--active-color);
+  background-color: var(--active-bg-color);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: start;
+  justify-content: end;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s;
+}
+.overlay.visible {
+  opacity: 1;
+  visibility: visible;
+  cursor: wait;
+  z-index: 999;
+}
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 20px;
+}
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

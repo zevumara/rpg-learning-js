@@ -69,6 +69,7 @@ aside ul li {
   transition-duration: 150ms;
 }
 aside ul li:hover {
+  cursor: pointer;
   color: var(--active-color);
 }
 
