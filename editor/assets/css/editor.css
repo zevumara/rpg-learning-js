@@ -72,7 +72,7 @@ button {
 }
 
 button.primary {
-  width: 90%;
+  width: 92%;
   background-color: var(--shadow-color);
   display: flex;
   justify-content: center;
@@ -80,29 +80,44 @@ button.primary {
   padding: 8px;
   margin: 12px auto;
   font-size: 0.9rem;
-  transition-property: background-color;
+  transition-property: background-color, color;
   transition-duration: 100ms;
+  border: 1px solid var(--shadow-color);
+  box-shadow: 0 2px 25px var(--bg-color);
 }
 button:hover.primary {
-  background-color: var(--active-bg-color);
+  color: var(--active-color);
+}
+button:active.primary {
+  transform: scale(0.9);
+  color: var(--primary-color);
+  background-color: var(--bg-color);
 }
 
 main {
   padding: 16px;
   display: flex;
   gap: 8px;
-  min-height: 100vh;
+  height: 100vh;
+  flex-direction: row;
+}
+
+section {
+  border: 1px solid var(--secondary-color);
+  height: calc(100vh - 32px);
+  flex-grow: 1;
 }
 
 aside {
   display: flex;
   position: relative;
   height: calc(100vh - 32px);
+  padding: 12px 0;
 }
 aside ul {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
   list-style: none;
   width: 100%;
 }
@@ -114,6 +129,7 @@ aside ul li {
   width: 100%;
   flex-direction: row;
   flex-wrap: wrap;
+  padding-left: 8px;
 }
 aside ul li span {
   display: none;
@@ -136,8 +152,8 @@ aside ul li:hover.active > * {
 aside button#close {
   display: none;
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 12px;
+  right: 12px;
   opacity: 0.5;
   transition-property: opacity;
   transition-duration: 150ms;
@@ -156,6 +172,7 @@ aside {
 }
 aside.expanded {
   width: 255px;
+  padding-right: 12px;
 }
 aside ul li.folder {
   display: none;
@@ -197,6 +214,29 @@ aside .folder li.selected {
   background-color: var(--active-bg-color);
 }
 
+#toolbar {
+  display: flex;
+  justify-content: space-between;
+}
+#toolbar ul {
+  display: flex;
+  list-style: none;
+}
+#toolbar ul li {
+  display: flex;
+  color: var(--primary-color);
+  stroke: var(--primary-color);
+  gap: 12px;
+  padding: 12px;
+  cursor: pointer;
+  transition-property: stroke, color;
+  transition-duration: 100ms;
+}
+#toolbar ul li:hover {
+  stroke: var(--active-color);
+  color: var(--active-color);
+}
+
 .overlay {
   position: fixed;
   top: 0;
@@ -223,7 +263,7 @@ aside .folder li.selected {
   border-top-color: white;
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  margin: 20px;
+  margin: 40px;
 }
 @keyframes spin {
   from {
@@ -232,4 +272,32 @@ aside .folder li.selected {
   to {
     transform: rotate(360deg);
   }
+}
+
+.bubbly-button {
+  display: inline-block;
+  appearance: none;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: transform ease-in 0.1s, box-shadow ease-in 0.25s;
+  box-shadow: 0 2px 25px rgba(255, 0, 130, 0.5);
+
+  width: 90%;
+  padding: 8px;
+  margin: 12px auto;
+  font-size: 0.9rem;
+}
+.bubbly-button:focus {
+  outline: 0;
+}
+.bubbly-button:active {
+  transform: scale(0.9);
+  background-color: #e60074;
+  box-shadow: 0 2px 25px rgba(255, 0, 130, 0.2);
+}
+
+sidebar-component {
+  display: contents;
 }
