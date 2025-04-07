@@ -115,20 +115,20 @@ class Signal extends EventTarget {
     const oldValue = this.#value;
     this.#value = newValue;
     this.dispatchEvent(new CustomEvent("change", { detail: { oldValue, newValue } }));
-    for (const effect of this.#effects) {
-      Batcher.scheduleEffect(() => effect(newValue));
+    for (const fn of this.#effects) {
+      Batcher.scheduleEffect(() => fn(newValue));
     }
   }
 
-  onChange(effect) {
-    effect(this.#value);
-    this.#effects.add(effect);
-    return () => this.#effects.delete(effect);
+  onChange(fn) {
+    fn(this.#value);
+    this.#effects.add(fn);
+    return () => this.#effects.delete(fn);
   }
 
-  unsubscribe(effect) {
-    if (effect) {
-      this.#effects.delete(effect);
+  unsubscribe(fn) {
+    if (fn) {
+      this.#effects.delete(fn);
     } else {
       this.#effects.clear();
     }
@@ -136,12 +136,6 @@ class Signal extends EventTarget {
 }
 
 const signal = (value) => new Signal(value);
-
-const UI = {
-  screen: signal("character"),
-  project: signal(null),
-  loading: signal(false),
-};
 
 /**
  * @class Component
@@ -190,6 +184,9 @@ class Component extends HTMLElement {
       this.#cleanup.push(...eventCleanups);
       this.onLoad();
       this.effects();
+      requestAnimationFrame(() => {
+        this.onReady();
+      });
     }
   }
 
@@ -208,6 +205,8 @@ class Component extends HTMLElement {
 
   onLoad() {}
 
+  onReady() {}
+
   onUnload() {}
 
   effects() {}
@@ -216,3 +215,11 @@ class Component extends HTMLElement {
     throw new Error("Debes definir render() en tu componente.");
   }
 }
+
+// Globals
+
+const UI = {
+  project: signal(null),
+  editing: signal("character"),
+  loading: signal(false),
+};

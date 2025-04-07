@@ -3,8 +3,6 @@ class ToolbarComponent extends Component {
     super();
   }
 
-  onLoad() {}
-
   render() {
     return html`
       <div id="toolbar">

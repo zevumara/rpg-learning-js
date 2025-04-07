@@ -8,10 +8,13 @@
     <link rel="icon" href="icon/icon.png" type="image/png" />
     <link rel="stylesheet" href="editor/assets/css/editor.css" />
     <title>RPG Learning JS</title>
-    <script src="editor/src/core/UI.js"></script>
+    <script src="libs/pixi.min.js"></script>
+    <script src="editor/src/core/ui.js"></script>
+    <script src="editor/src/core/sprite.js"></script>
     <script src="editor/src/components/loading.js"></script>
     <script src="editor/src/components/sidebar.js"></script>
     <script src="editor/src/components/toolbar.js"></script>
+    <script src="editor/src/components/previewer.js"></script>
   </head>
   <body>
     <loading-component />
@@ -19,6 +22,11 @@
       <sidebar-component />
       <section>
         <toolbar-component />
+        <div class="previews">
+          <previewer-component type="character" />
+          <previewer-component type="battler" />
+          <previewer-component type="face" />
+        </div>
       </section>
     </main>
   </body>
