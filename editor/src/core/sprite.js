@@ -1,49 +1,15 @@
-class CharacterSprite extends PIXI.AnimatedSprite {
-  constructor(
-    baseTexture,
-    {
-      frameWidth = 24,
-      frameHeight = 24,
-      directions = ["down", "left", "right", "up"],
-      framesPerDirection = 3,
-      animationSpeed = 0.15,
-    } = {}
-  ) {
-    const animations = CharacterSprite._splitSheet(baseTexture, {
-      frameWidth,
-      frameHeight,
-      directions,
-      framesPerDirection,
-    });
-
+class Sprite extends PIXI.AnimatedSprite {
+  constructor(animations) {
     super(animations.down);
     this.animations = animations;
-    this.animationSpeed = animationSpeed;
+    this.animationSpeed = 0.1;
     this.anchor.set(0.5);
     this.play();
   }
 
-  static _splitSheet(baseTexture, { frameWidth, frameHeight, directions, framesPerDirection }) {
-    const animations = {};
-    for (let dir = 0; dir < directions.length; dir++) {
-      const name = directions[dir];
-      animations[name] = [];
-      for (let frame = 0; frame < framesPerDirection; frame++) {
-        const rect = new PIXI.Rectangle(
-          frame * frameWidth,
-          dir * frameHeight,
-          frameWidth,
-          frameHeight
-        );
-        animations[name].push(new PIXI.Texture(baseTexture, rect));
-      }
-    }
-    return animations;
-  }
-
-  setDirection(dir) {
-    if (!this.animations[dir]) return console.warn(`Dirección inválida: ${dir}`);
-    this.textures = this.animations[dir];
+  setState(state) {
+    if (!this.animations[state]) return console.error(`Animación no encontrada: ${state}`);
+    this.textures = this.animations[state];
     this.play();
   }
 
@@ -51,54 +17,77 @@ class CharacterSprite extends PIXI.AnimatedSprite {
     this.gotoAndStop(index % this.textures.length);
   }
 
-  playAnimation(dir) {
-    this.setDirection(dir);
-    this.play();
+  static async fromSpriteSheet({
+    texture,
+    frameWidth = 24,
+    frameHeight = 24,
+    states = [],
+    framesPerState = 3,
+    name = "spr",
+    pingpong = false,
+  }) {
+    const atlasData = Sprite._generateAtlas({
+      texture,
+      frameWidth,
+      frameHeight,
+      states,
+      framesPerState,
+      name,
+      pingpong,
+    });
+    texture.baseTexture.scaleMode = "nearest";
+    const spritesheet = new PIXI.Spritesheet(texture, atlasData);
+    await spritesheet.parse();
+
+    return new Sprite(spritesheet.animations);
   }
-}
 
-function generateRpgMakerAtlas({
-  name = "hero",
-  frameWidth = 48,
-  frameHeight = 48,
-  directions = ["down", "left", "right", "up"],
-  framesPerDirection = 3,
-  imagePath,
-}) {
-  const frames = {};
-  const animations = {};
+  static _generateAtlas({
+    texture,
+    frameWidth,
+    frameHeight,
+    states,
+    framesPerState,
+    name,
+    pingpong = false,
+  }) {
+    const frames = {};
+    const animations = {};
 
-  for (let dir = 0; dir < directions.length; dir++) {
-    const directionName = directions[dir];
-    const animFrames = [];
+    for (let state = 0; state < states.length; state++) {
+      const stateName = states[state];
+      const baseFrameNames = [];
 
-    for (let frame = 0; frame < framesPerDirection; frame++) {
-      const frameName = `${name}_${directionName}_${frame}`;
-      animFrames.push(frameName);
+      for (let frame = 0; frame < framesPerState; frame++) {
+        const frameName = `${name}_${stateName}_${frame}`;
+        baseFrameNames.push(frameName);
 
-      frames[frameName] = {
-        frame: {
-          x: frame * frameWidth,
-          y: dir * frameHeight,
-          w: frameWidth,
-          h: frameHeight,
-        },
-        sourceSize: { w: frameWidth, h: frameHeight },
-        spriteSourceSize: { x: 0, y: 0, w: frameWidth, h: frameHeight },
-      };
+        frames[frameName] = {
+          frame: {
+            x: frame * frameWidth,
+            y: state * frameHeight,
+            w: frameWidth,
+            h: frameHeight,
+          },
+          sourceSize: { w: frameWidth, h: frameHeight },
+          spriteSourceSize: { x: 0, y: 0, w: frameWidth, h: frameHeight },
+        };
+      }
+
+      animations[stateName] = pingpong
+        ? [baseFrameNames[0], baseFrameNames[1], baseFrameNames[2], baseFrameNames[1]]
+        : baseFrameNames;
     }
 
-    animations[directionName] = animFrames;
+    return {
+      frames,
+      animations,
+      meta: {
+        texture,
+        format: "RGBA8888",
+        size: { w: frameWidth * framesPerState, h: frameHeight * states.length },
+        scale: "1",
+      },
+    };
   }
-
-  return {
-    frames,
-    animations,
-    meta: {
-      image: imagePath,
-      format: "RGBA8888",
-      size: { w: frameWidth * framesPerDirection, h: frameHeight * directions.length },
-      scale: "1",
-    },
-  };
 }

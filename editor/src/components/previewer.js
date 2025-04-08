@@ -8,10 +8,12 @@ class PreviewerComponent extends Component {
       battler: ["Attack", "Idle", "Win", "Lose"],
       face: ["Normal", "Happy", "Angry", "Boring"],
     };
-    this.scales = [1, 2, 3];
-    this.indexFrame = 0;
-    this.indexZoom = 0;
+    this.scales = [2, 3, 4, 5, 6, 7, 8];
+    this.indexFrame = 2;
+    this.indexZoom = 3;
     this.pixi = null;
+    this.composition = null;
+    this.layers = [];
   }
 
   onLoad() {
@@ -33,27 +35,29 @@ class PreviewerComponent extends Component {
   }
 
   async setupPIXI() {
-    const container = this.querySelector(".previewer");
     this.pixi = new PIXI.Application();
-    await this.pixi.init({
-      backgroundAlpha: 0,
-    });
+    await this.pixi.init({ backgroundAlpha: 0 });
+    this.composition = new PIXI.Container();
+
+    const container = this.querySelector(".previewer");
     container.appendChild(this.pixi.canvas);
 
     const texture = await PIXI.Assets.load("/test/$Alex.png");
-    const character = new CharacterSprite(texture);
-    this.pixi.stage.addChild(character);
-    character.anchor.set(0.5);
-    character.x = this.pixi.screen.width / 2;
-    character.y = this.pixi.screen.height / 2;
-    character.setDirection("left");
-
-    // Mostrar un frame estático (por ejemplo, el segundo frame hacia arriba)
-    character.setDirection("up");
-    character.setFrame(1);
-
-    // O volver a animar
-    character.playAnimation("right");
+    const layerBody = await Sprite.fromSpriteSheet({
+      texture: texture,
+      frameWidth: 24,
+      frameHeight: 24,
+      states: ["down", "left", "right", "up"],
+      framesPerState: 3,
+      name: "char",
+      pingpong: true,
+    });
+    this.layers.push(layerBody);
+    this.composition.addChild(layerBody);
+    this.composition.scale.set(5);
+    this.composition.position.set(this.pixi.screen.width / 2, this.pixi.screen.height / 2);
+    this.composition.pivot.set(0, 4);
+    this.pixi.stage.addChild(this.composition);
     container.classList.add("loaded");
   }
 
@@ -75,13 +79,16 @@ class PreviewerComponent extends Component {
       this.signal.frame.onChange((value) => {
         Batcher.run(() => {
           this.querySelector(".name").textContent = value;
+          for (const layer of this.layers) {
+            layer.setState(value.toLowerCase());
+          }
         });
       })
     );
     this.register(
       this.signal.zoom.onChange((value) => {
         Batcher.run(() => {
-          // console.log("zoom:", value);
+          this.composition?.scale.set(value);
         });
       })
     );
@@ -89,15 +96,15 @@ class PreviewerComponent extends Component {
 
   prevFrame() {
     if (this.active) {
-      this.indexFrame =
-        (this.indexFrame - 1 + this.frames[this.type].length) % this.frames[this.type].length;
+      this.indexFrame = (this.indexFrame + 1) % this.frames[this.type].length;
       this.signal.frame.value = this.frames[this.type][this.indexFrame];
     }
   }
 
   nextFrame() {
     if (this.active) {
-      this.indexFrame = (this.indexFrame + 1) % this.frames[this.type].length;
+      this.indexFrame =
+        (this.indexFrame - 1 + this.frames[this.type].length) % this.frames[this.type].length;
       this.signal.frame.value = this.frames[this.type][this.indexFrame];
     }
   }
