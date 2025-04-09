@@ -14,6 +14,15 @@ class SidebarComponent extends Component {
       const li = event.target.closest("li");
       if (li.dataset.file) this.selectFile(li);
     });
+
+    this.querySelector("input#file").addEventListener("change", async (event) => {
+      try {
+        const project = await readFile(event.target.files[0]);
+        console.log(project);
+      } catch (error) {
+        console.error("Error leyendo o parseando el archivo:", error);
+      }
+    });
   }
 
   toggleSidebar() {
@@ -21,6 +30,7 @@ class SidebarComponent extends Component {
   }
 
   openFolder() {
+    this.querySelector("#file").click();
     const files = [
       "character_nameaaaaaaaaaaaaaassassadadsaaaaaaaaaaaaaaa",
       "ESTO ES UNA PRUEBA",
@@ -118,6 +128,7 @@ class SidebarComponent extends Component {
             <span>Files</span>
           </li>
           <li class="folder">
+            <input type="file" id="file" accept=".rrcd" style="display: none;" />
             <button class="primary" @click="openFolder">Open Folder</button>
             <div class="search">
               <svg width="20" height="20" viewBox="0 0 24 24">

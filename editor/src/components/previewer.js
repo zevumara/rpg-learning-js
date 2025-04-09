@@ -8,9 +8,9 @@ class PreviewerComponent extends Component {
       battler: ["Attack", "Idle", "Win", "Lose"],
       face: ["Normal", "Happy", "Angry", "Boring"],
     };
-    this.scales = [2, 3, 4, 5, 6, 7, 8];
+    this.scales = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     this.indexFrame = 2;
-    this.indexZoom = 3;
+    this.indexZoom = 4;
     this.pixi = null;
     this.composition = null;
     this.layers = [];
@@ -43,7 +43,7 @@ class PreviewerComponent extends Component {
     container.appendChild(this.pixi.canvas);
 
     const texture = await PIXI.Assets.load("/test/$Alex.png");
-    const layerBody = await Sprite.fromSpriteSheet({
+    const layerBody = await Character.fromSpriteSheet({
       texture: texture,
       frameWidth: 24,
       frameHeight: 24,
@@ -54,7 +54,7 @@ class PreviewerComponent extends Component {
     });
     this.layers.push(layerBody);
     this.composition.addChild(layerBody);
-    this.composition.scale.set(5);
+    this.composition.scale.set(this.indexZoom + 1);
     this.composition.position.set(this.pixi.screen.width / 2, this.pixi.screen.height / 2);
     this.composition.pivot.set(0, 4);
     this.pixi.stage.addChild(this.composition);

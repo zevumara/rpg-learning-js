@@ -1,4 +1,4 @@
-class Sprite extends PIXI.AnimatedSprite {
+class Character extends PIXI.AnimatedSprite {
   constructor(animations) {
     super(animations.down);
     this.animations = animations;
@@ -26,7 +26,7 @@ class Sprite extends PIXI.AnimatedSprite {
     name = "spr",
     pingpong = false,
   }) {
-    const atlasData = Sprite._generateAtlas({
+    const atlasData = Character._generateAtlas({
       texture,
       frameWidth,
       frameHeight,
@@ -39,7 +39,7 @@ class Sprite extends PIXI.AnimatedSprite {
     const spritesheet = new PIXI.Spritesheet(texture, atlasData);
     await spritesheet.parse();
 
-    return new Sprite(spritesheet.animations);
+    return new Character(spritesheet.animations);
   }
 
   static _generateAtlas({
