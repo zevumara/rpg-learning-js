@@ -2,7 +2,7 @@ class Character extends PIXI.AnimatedSprite {
   constructor(animations) {
     super(animations.down);
     this.animations = animations;
-    this.animationSpeed = 0.1;
+    this.animationSpeed = 0.07;
     this.anchor.set(0.5);
     this.play();
   }
@@ -20,7 +20,7 @@ class Character extends PIXI.AnimatedSprite {
   static async fromSpriteSheet({
     texture,
     frameWidth = 24,
-    frameHeight = 24,
+    frameHeight = 32,
     states = [],
     framesPerState = 3,
     name = "spr",

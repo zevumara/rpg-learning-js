@@ -3,6 +3,16 @@ class ToolbarComponent extends Component {
     super();
   }
 
+  save() {
+    // Exporta los datos de UI.project.value
+  }
+
+  export() {
+    // Lee UI.editing.value para saber que tiene seleccionado
+    // Usa la información de lo seleccionado de UI.project.value
+    // En base a esa información, crea un container en pixi con todas las capas y la exporta a png
+  }
+
   render() {
     return html`
       <div id="toolbar">

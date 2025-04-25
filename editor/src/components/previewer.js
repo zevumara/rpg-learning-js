@@ -38,15 +38,16 @@ class PreviewerComponent extends Component {
     this.pixi = new PIXI.Application();
     await this.pixi.init({ backgroundAlpha: 0 });
     this.composition = new PIXI.Container();
-
     const container = this.querySelector(".previewer");
     container.appendChild(this.pixi.canvas);
 
-    const texture = await PIXI.Assets.load("/test/$Alex.png");
+    //
+
+    const texture = await PIXI.Assets.load("/test/$body.png");
     const layerBody = await Character.fromSpriteSheet({
       texture: texture,
       frameWidth: 24,
-      frameHeight: 24,
+      frameHeight: 32,
       states: ["down", "left", "right", "up"],
       framesPerState: 3,
       name: "char",
@@ -56,9 +57,19 @@ class PreviewerComponent extends Component {
     this.composition.addChild(layerBody);
     this.composition.scale.set(this.indexZoom + 1);
     this.composition.position.set(this.pixi.screen.width / 2, this.pixi.screen.height / 2);
-    this.composition.pivot.set(0, 4);
+    this.composition.pivot.set(0, 6);
     this.pixi.stage.addChild(this.composition);
     container.classList.add("loaded");
+  }
+
+  drawLayer(layer) {
+    // Se encarga de dibujar una capa y agregarla al container
+  }
+
+  onUpdate() {
+    // Se dispara cuando se actualiza UI.project.value:
+    // 1. Re dibuja todas las capas en base a la información del objetp project
+    // 2. Optimización: ¿Hacer que solo dibuje las que se actualizan?
   }
 
   effects() {

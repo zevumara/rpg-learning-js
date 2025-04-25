@@ -2,27 +2,27 @@
   "colors": {},
   "character": {
     "body": {
-      "file": "/test/$Alex.png",
+      "file": "",
       "position": { "x": "0", "y": "0" },
       "recolors": {}
     },
     "head": {
-      "file": "/test/$Alex.png",
+      "file": "",
       "position": { "x": "0", "y": "0" },
       "recolors": {}
     },
     "upper": {
-      "file": "/test/$Alex.png",
+      "file": "",
       "position": { "x": "0", "y": "0" },
       "recolors": {}
     },
     "lower": {
-      "file": "/test/$Alex.png",
+      "file": "",
       "position": { "x": "0", "y": "0" },
       "recolors": {}
     },
     "face": {
-      "file": "/test/$Alex.png",
+      "file": "",
       "position": { "x": "0", "y": "0" },
       "recolors": {}
     }

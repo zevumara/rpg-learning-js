@@ -55,6 +55,14 @@ input:focus {
   opacity: 0.5;
   cursor: default;
 }
+button:hover.primary.disabled {
+  color: var(--primary-color);
+}
+button:active.primary.disabled {
+  transform: scale(1);
+  color: var(--primary-color);
+  background-color: var(--shadow-color);
+}
 .debug {
   border: 1px dashed red;
 }

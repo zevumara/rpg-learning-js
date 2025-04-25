@@ -29,8 +29,11 @@ class SidebarComponent extends Component {
     this.signal.expanded.value = !this.signal.expanded.value;
   }
 
-  openFolder() {
+  openFile() {
     this.querySelector("#file").click();
+  }
+
+  openFolder() {
     const files = [
       "character_nameaaaaaaaaaaaaaassassadadsaaaaaaaaaaaaaaa",
       "ESTO ES UNA PRUEBA",
@@ -128,8 +131,10 @@ class SidebarComponent extends Component {
             <span>Files</span>
           </li>
           <li class="folder">
+            <button class="primary disabled">New Character</button>
+            <button class="primary" @click="openFile">Load Character</button>
+            <button class="primary" @click="openFolder">Open Folder...</button>
             <input type="file" id="file" accept=".rrcd" style="display: none;" />
-            <button class="primary" @click="openFolder">Open Folder</button>
             <div class="search">
               <svg width="20" height="20" viewBox="0 0 24 24">
                 <path fill="none" d="M17.5 17.5L22 22m-2-11a9 9 0 1 0-18 0a9 9 0 0 0 18 0" />
